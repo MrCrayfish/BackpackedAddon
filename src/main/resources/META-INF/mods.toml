@@ -1,0 +1,33 @@
+modLoader="javafml"
+loaderVersion="[34,)"
+license="GNU General Public License 3"
+
+[[mods]]
+modId="backpackedaddon"
+version="0.1.0"
+displayName="Backpacked Example Addon"
+authors="MrCrayfish"
+credits="MrCrayfish for the awesome Backpacked mod!"
+description="An example mod to add more backpack customisation to Backpacked!"
+
+[[dependencies.backpackedaddon]]
+    modId="forge"
+    mandatory=true
+    versionRange="[41.1.0,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.backpackedaddon]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19,1.20)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.backpackedaddon]]
+    modId="curios"
+    mandatory=false
+    versionRange="[1.19-5.1.0.1,)"
+    ordering="AFTER"
+    side="BOTH"
+
+[modproperties.backpacked]
+    catalogueImageIcon="backpackedaddon.png" #Support for Catalogue mod

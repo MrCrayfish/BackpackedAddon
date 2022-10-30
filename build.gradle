@@ -1,0 +1,104 @@
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.+'
+    id 'org.spongepowered.mixin' version '0.7-SNAPSHOT'
+}
+
+version = project.property('mod.version') + "-1.19"
+group = 'com.mrcrayfish'
+archivesBaseName = project.property('mod.id')
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+minecraft {
+    mappings channel: 'official', version: '1.19.2'
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                backpackedaddon {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                backpackedaddon {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            property 'forge.logging.markers', 'REGISTRIES'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'backpackedaddon', '--all', '--output', file('src/generated/resources/')
+            mods {
+                backpackedaddon {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    maven {
+        url = "https://www.cursemaven.com"
+    }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.19.2-43.1.1'
+    implementation fg.deobf('curse.maven:curios-309927:3871347')
+    implementation fg.deobf('curse.maven:backpacked-352835:3923045')
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+}
+
+jar {
+    manifest {
+        attributes([
+            "Specification-Title": project.property('mod.name'),
+            "Specification-Vendor": project.property('mod.author'),
+            "Specification-Version": "1",
+            "Implementation-Title": project.property('mod.name'),
+            "Implementation-Version": project.property('mod.version'),
+            "Implementation-Vendor" : project.property('mod.author'),
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            "MixinConfigs": "backpacked.mixins.json"
+        ])
+    }
+}
+
+def reobfFile = file("$buildDir/reobfJar/output.jar")
+def reobfArtifact = artifacts.add('default', reobfFile) {
+    type 'jar'
+    builtBy 'reobfJar'
+}
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact reobfArtifact
+        }
+    }
+    repositories {
+        maven {
+            url "file://C:/dev/maven/mcmodsrepo"
+        }
+    }
+}
