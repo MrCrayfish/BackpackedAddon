@@ -23,6 +23,12 @@ description="An example mod to add more backpack customisation to Backpacked!"
     ordering="NONE"
     side="BOTH"
 [[dependencies.backpackedaddon]]
+    modId="backpacked"
+    mandatory=true
+    versionRange="[2.0.0,)"
+    ordering="AFTER"
+    side="BOTH"
+[[dependencies.backpackedaddon]]
     modId="curios"
     mandatory=false
     versionRange="[1.19-5.1.0.1,)"
